@@ -48,7 +48,7 @@ export type Post = {
     long: number;          
     start_time: Date;
     end_time: Date;
-    slots: number;
+    capacity: number;
     people: number;
     terminate: boolean;
 };

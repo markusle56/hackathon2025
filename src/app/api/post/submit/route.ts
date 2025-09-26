@@ -3,7 +3,7 @@ import clientPromise from "@/lib/mongodb";
 
 export async function POST(request: Request) {
   try {
-    const { title, description, img, lat, long, tags, start_time, end_time, slots } =
+    const { title, description, img, lat, long, tags, start_time, end_time, capacity } =
       await request.json();
 
     const client = await clientPromise;
@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         long,
         start_time,
         end_time,
-        slots,
+        capacity,
         people:1,
         terminate: false,
     });
