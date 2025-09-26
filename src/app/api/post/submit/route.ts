@@ -10,9 +10,20 @@ export async function POST(request: Request) {
     const description = formData.get("description") as string;
     const lat = parseFloat(formData.get("lat") as string);
     const long = parseFloat(formData.get("long") as string);
-    const start_time = new Date(parseInt(formData.get("start_time") as string));
-    const end_time = new Date(parseInt(formData.get("end_time") as string));
-    const capacity = parseInt(formData.get("slots") as string);
+    function buildDateFromTime(timeStr: string) {
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      const now = new Date();
+      now.setHours(hours, minutes, 0, 0); // set h, m, s, ms
+      return now;
+    }
+    const start_time = buildDateFromTime(formData.get("start_time") as string);
+    const end_time = buildDateFromTime(formData.get("end_time") as string);
+    const capacity = parseInt(formData.get("capacity") as string);
+    // Split tags by commas and trim whitespace
+    const tags = (formData.get("tags") as string)
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter((tag) => tag.length > 0);
 
     if (!title || !description || isNaN(lat) || isNaN(long)) {
       return NextResponse.json({ error: "Invalid input data" }, { status: 400 });
@@ -49,6 +60,7 @@ export async function POST(request: Request) {
       img: imageUrl,
       lat,
       long,
+      tags,
       start_time,
       end_time,
       capacity: capacity,
