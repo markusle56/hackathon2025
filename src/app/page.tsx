@@ -7,10 +7,11 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import { SuggestionsBox } from "@/components/SuggestionsBox";
 import { Map, Marker, Popup } from 'react-map-gl/maplibre';
 import { Post } from "@/lib/utilis";
-import { LuCircleUserRound } from "react-icons/lu";
+import { PiFinnTheHumanFill } from "react-icons/pi";
+import { GiPlasticDuck } from "react-icons/gi";
+import { FaLocationDot } from "react-icons/fa6";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
 import SessionCard from "@/components/SessionCard";
-import { MdMyLocation } from 'react-icons/md';
 
 import { FAQ } from '@/components/FAQ';
 
@@ -147,8 +148,8 @@ export default function HomePage() {
         mapStyle={mapStyle}>
         {posts.map((post, idx) => (
           <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
-            <LuCircleUserRound 
-              className="text-white text-2xl cursor-pointer" 
+            <GiPlasticDuck 
+              className="text-yellow-300 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
               onClick={(e) => {
                 e.stopPropagation();
                 handleMarkerClick(post);
@@ -157,8 +158,8 @@ export default function HomePage() {
           </Marker>
         ))}
         <Marker anchor='center' longitude={longitude} latitude={latitude}>
-            <MdMyLocation
-              className="text-blue text-2xl" 
+            <FaLocationDot
+              className="text-red-500 text-3xl " 
             />
         </Marker>
 

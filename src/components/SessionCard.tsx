@@ -74,18 +74,18 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
 
   return (
     <>
-      <div className="max-w-3xs rounded-lg overflow-hidden border border-black">
+      <div className="w-full rounded-lg overflow-hidden">
         {session.img && (
-          <div className="px-4 py-3">
+          <div className="px-2 py-1">
             <img src={session.img} alt="Illustration session spots" />
           </div>
         )}
-        <div className="px-4 py-3">
+        <div className="px-2 py-3">
           <div className="font-bold text-xl mb-1">{session.title ?? "Untitled"}</div>
           <p className="text-gray-700 text-sm">{session.description ?? ""}</p>
         </div>
 
-        <div className="px-4 pb-2 text-sm text-gray-700 flex items-center gap-4">
+        <div className="px-2 pb-2 text-10 text-gray-700 flex items-center gap-2">
           <span className="flex items-center gap-1">
             <img src={icons[0]} alt="users" className="inline-block w-4 h-4" />
             <span>{session.people ?? 0}/{session.capacity ?? 0}</span>
@@ -97,7 +97,7 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
           </span>
         </div>
 
-        <div className="px-4 pt-2 pb-3">
+        <div className="px-2 pt-2 pb-3">
           {(session.tags ?? []).map((tag) => (
             <span
               key={tag}
@@ -108,7 +108,7 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
           ))}
         </div>
 
-        <div className="px-4 pb-4">
+        <div className="px-2 pb-1">
           <button
             onClick={joinHandler}
             className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md w-full"
