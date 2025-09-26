@@ -32,7 +32,7 @@ export async function GET(req: Request) {
                 long: Number(currPost.long ?? (currPost.longtitude ?? 0)),
                 start_time: currPost.start_time ? new Date(currPost.start_time) : new Date(0),
                 end_time: currPost.end_time ? new Date(currPost.end_time) : new Date(0),
-                capacity: Number(currPost.slots ?? 0),
+                capacity: Number(currPost.capicity ?? 0),
                 people: Number(currPost.people ?? 0),
                 terminate: Boolean(currPost.terminate ?? false),
             };
@@ -53,7 +53,7 @@ export async function GET(req: Request) {
                 long: Number(p.long ?? (p.longtitude ?? 0)),
                 start_time: p.start_time ? new Date(p.start_time) : new Date(0),
                 end_time: p.end_time ? new Date(p.end_time) : new Date(0),
-                capacity: Number(p.slots ?? 0),
+                capacity: Number(p.capacity ?? 0),
                 people: Number(p.people ?? 0),
                 terminate: Boolean(p.terminate ?? false),
             }));
@@ -94,7 +94,7 @@ export async function GET(req: Request) {
                 long: Number(p.long ?? (p.longtitude ?? 0)),
                 start_time: p.start_time ? new Date(p.start_time) : new Date(0),
                 end_time: p.end_time ? new Date(p.end_time) : new Date(0),
-                capacity: Number(p.slots ?? 0),
+                capacity: Number(p.capacity ?? 0),
                 people: Number(p.people ?? 0),
                 terminate: Boolean(p.terminate ?? false),
             }));
@@ -121,7 +121,7 @@ export async function GET(req: Request) {
                 long: Number(p.long ?? (p.longtitude ?? 0)),
                 start_time: p.start_time ? new Date(p.start_time) : new Date(0),
                 end_time: p.end_time ? new Date(p.end_time) : new Date(0),
-                capacity: Number(p.slots ?? 0),
+                capacity: Number(p.capacity ?? 0),
                 people: Number(p.people ?? 0),
                 terminate: Boolean(p.terminate ?? false),
             }));
