@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 
 
-export function suggestionsBox(){
+export function SuggestionsBox(){
     return (
         <div className='bg-white rounded-b-sm'>
             <h1>Suggestions</h1>
