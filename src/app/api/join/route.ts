@@ -19,8 +19,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    if (typeof post.slots === "number" && typeof post.people === "number") {
-      if (post.people >= post.slots) {
+    if (typeof post.capacity === "number" && typeof post.people === "number") {
+      if (post.people >= post.capacity) {
         return NextResponse.json({ error: "No slots available" }, { status: 403 });
       }
     }
