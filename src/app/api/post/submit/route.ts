@@ -20,7 +20,7 @@ export async function POST(request: Request) {
         long,
         start_time: new Date(start_time),
         end_time: new Date(end_time),
-        slots,
+        capacity: capacity,
         people:1,
         terminate: false,
     });
