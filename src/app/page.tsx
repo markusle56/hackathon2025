@@ -4,11 +4,8 @@ import { useState } from "react";
 import dynamic from "next/dynamic";
 import type { ViewState, ViewStateChangeEvent } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
-
-const ReactMapGL = dynamic(
-  () => import("react-map-gl/maplibre"),
-  { ssr: false }
-);
+import { SuggestionsBox } from "@/components/SuggestionsBox";
+import {Map} from 'react-map-gl/maplibre'
 
 export default function HomePage() {
   const [viewState, setViewState] = useState<MapViewState>({
@@ -42,15 +39,17 @@ export default function HomePage() {
 
   return (
     <main className="top-0 left-0 w-screen h-screen m-0 p-0 overflow-hidden relative">
-      <ReactMapGL
+      <Map
         className="w-full h-full"
         initialViewState={viewState}
         mapStyle={mapStyle}
-        onMove={handleMove}
-      />
+        onMove={handleMove}>
+
+          
+        </Map>
 
       <div className="absolute top-0 left-0 z-5">
-        <h1 className="bg-white">hi</h1>
+        <SuggestionsBox/>
       </div>
     </main>
   );
