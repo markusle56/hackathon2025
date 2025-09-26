@@ -30,7 +30,6 @@ import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/s
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 
-// Define Zod schema (matches your outline + code fields; adjust as needed)
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title too long"),
   description: z.string().min(1, "Description is required").max(500, "Description too long"),
@@ -79,7 +78,7 @@ export function CreateSessionCard() {
     setFiles(droppedFiles);
     form.setValue("files", droppedFiles); 
   };
-
+  // Bao do this part pls
   async function onSubmit(values: FormData) {
     const submittedData = {
       ...values,
@@ -108,7 +107,7 @@ export function CreateSessionCard() {
       submittedData.files.forEach((file) => formData.append("images", file));
 
       try {
-        const response = await fetch("/api/sessions", {
+        const response = await fetch("/api/post/submit", {
           method: "POST",
           body: formData,
         });
@@ -124,7 +123,7 @@ export function CreateSessionCard() {
         console.error("Upload error:", error);
       }
     } else {
-      await fetch("/api/sessions", {
+      await fetch("/api/post/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(submittedData),
@@ -138,9 +137,9 @@ export function CreateSessionCard() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Create Study Session</Button>
+        <Button variant="outline" className="bg-white text-black">Create Study Session</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-white">
         <DialogHeader>
           <DialogTitle>Create Study Session</DialogTitle>
 
@@ -278,7 +277,7 @@ export function CreateSessionCard() {
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={form.formState.isSubmitting}>
+              <Button type="submit" className="bg-black text-white" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? "Creating..." : "Create Session"}
               </Button>
             </DialogFooter>

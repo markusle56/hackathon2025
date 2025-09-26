@@ -117,16 +117,16 @@ export default function HomePage() {
     });
   };
 
-  const getSessionData = (post: Post) => ({
-    title: post.title,
-    description: post.description,
-    icons: ["/img/users-round.svg", "/img/clock.svg"],
-    people: post.people,
-    capacity: post.capacity,
-    start_time: post.start_time,
-    end_time: post.end_time,
-    tags: post.tags
-  });
+  // const getSessionData = (post: Post) => ({
+  //   title: post.title,
+  //   description: post.description,
+  //   icons: ["/img/users-round.svg", "/img/clock.svg"],
+  //   people: post.people,
+  //   capacity: post.capacity,
+  //   start_time: post.start_time,
+  //   end_time: post.end_time,
+  //   tags: post.tags
+  // });
 
   const handleMarkerClick = (post: Post) => {
     setSelectedPost(post);
@@ -170,8 +170,9 @@ export default function HomePage() {
             closeOnClick={true}
             onClose={handlePopupClose}
             className="custom-popup"
+            closeButton={false}
           >
-            <SessionCard session={getSessionData(selectedPost)} />
+            <SessionCard session={selectedPost} id={id} setId={setId} />
           </Popup>
         )}
       </Map>
