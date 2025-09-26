@@ -1,0 +1,215 @@
+{
+    "version": 8,
+    "name": "Detailed MapLibre Street Map Example (Vivid Colors Fixed)",
+    "metadata": {
+      "maplibre:example": "Robust expressions and light for colorful rendering"
+    },
+    "center": [138.6047, -34.9196],
+    "zoom": 14,
+    "bearing": -17.6,
+    "pitch": 45,
+    "light": {
+      "anchor": "viewport",
+      "intensity": 0.5,
+      "color": "white",
+      "position": [215, 60, 50]
+    },
+    "glyphs": "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+    "transition": {
+      "duration": 300,
+      "delay": 0
+    },
+    "sources": {
+      "openmaptiles": {
+        "type": "vector",
+        "tiles": [
+          "https://demotiles.maplibre.org/tiles/v3/{z}/{x}/{y}.pbf"
+        ],
+        "minzoom": 0,
+        "maxzoom": 14,
+        "attribution": "© MapLibre"
+      },
+      "custom-points": {
+        "type": "geojson",
+        "data": {
+          "type": "FeatureCollection",
+          "features": [
+            {
+              "type": "Feature",
+              "geometry": {
+                "type": "Point",
+                "coordinates": [138.6047, -34.9196]
+              },
+              "properties": {
+                "name": "Custom Point (Adelaide)",
+                "population": 1000
+              }
+            }
+          ]
+        }
+      }
+    },
+    "layers": [
+      {
+        "id": "background",
+        "type": "background",
+        "paint": {
+          "background-color": "#f0ede7"
+        }
+      },
+      {
+        "id": "water",
+        "type": "fill",
+        "source": "openmaptiles",
+        "source-layer": "water",
+        "minzoom": 0,
+        "paint": {
+          "fill-color": "#85c5d5",
+          "fill-opacity": 0.9,
+          "fill-antialias": true,
+          "fill-outline-color": "#5aa9c0"
+        }
+      },
+      {
+        "id": "landcover",
+        "type": "fill",
+        "source": "openmaptiles",
+        "source-layer": "landcover",
+        "minzoom": 5,
+        "paint": {
+          "fill-color": [
+            "match",
+            ["get", "class"],
+            "wood", "#a0c8a0",
+            "grass", "#d7f9d7",
+            "beach", "#f0e6c2",
+            "cement", "#e0d8c8",
+            ["match",
+              ["get", "subclass"],
+              "park", "#c8e6c9",
+              "forest", "#81c784",
+              "residential", "#e0d8c8",
+              "scrub", "#b2dfdb",
+              "#d7f9d7"
+            ]
+          ],
+          "fill-opacity": 0.7
+        }
+      },
+      {
+        "id": "buildings",
+        "type": "fill-extrusion",
+        "source": "openmaptiles",
+        "source-layer": "building",
+        "minzoom": 13,
+        "paint": {
+          "fill-extrusion-color": "#ddd",
+          "fill-extrusion-height": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            15, 0,
+            15.05, ["get", "height"]
+          ],
+          "fill-extrusion-base": 0,
+          "fill-extrusion-opacity": 0.8
+        }
+      },
+      {
+        "id": "roads",
+        "type": "line",
+        "source": "openmaptiles",
+        "source-layer": "transportation",
+        "minzoom": 8,
+        "filter": ["all", [">=", "class", 1]],
+        "paint": {
+          "line-width": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            10, 1.5,
+            18, 15
+          ],
+          "line-color": [
+            "match",
+            ["get", "class"],
+            "motorway", "#e63946",
+            "trunk", "#f07167",
+            "primary", "#ff9500",
+            "secondary", "#ffd93d",
+            "tertiary", "#a8e6cf",
+            "residential", "#b3cde0",
+            "service", "#deebf7",
+            "track", "#dfc27d",
+            "path", "#c1b7a4",
+            "#969696"
+          ],
+          "line-opacity": 0.9
+        }
+      },
+      {
+        "id": "road-labels",
+        "type": "symbol",
+        "source": "openmaptiles",
+        "source-layer": "transportation_name",
+        "minzoom": 12,
+        "layout": {
+          "text-field": ["coalesce", ["get", "name:en"], ["get", "name"]],
+          "text-font": ["Open Sans Regular"],
+          "text-size": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            12, 10,
+            16, 14
+          ],
+          "symbol-placement": "line",
+          "symbol-spacing": 450,
+          "text-rotation-alignment": "map"
+        },
+        "paint": {
+          "text-color": "#333",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 1.5,
+          "text-halo-blur": 0.5
+        }
+      },
+      {
+        "id": "place-labels",
+        "type": "symbol",
+        "source": "openmaptiles",
+        "source-layer": "place",
+        "minzoom": 4,
+        "filter": ["in", "class", "city", "town", "suburb"],
+        "layout": {
+          "text-field": ["get", "name"],
+          "text-font": ["Open Sans Semibold"],
+          "text-size": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            10, 10,
+            12, 12
+          ],
+          "text-anchor": "center"
+        },
+        "paint": {
+          "text-color": "#2c3e50",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 2
+        }
+      },
+      {
+        "id": "custom-points",
+        "type": "circle",
+        "source": "custom-points",
+        "paint": {
+          "circle-radius": 15,
+          "circle-color": "#e74c3c",
+          "circle-opacity": 1,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 3
+        }
+      }
+    ]
+  }
