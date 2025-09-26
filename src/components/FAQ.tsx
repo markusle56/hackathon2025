@@ -9,6 +9,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+
 import { Button } from "@/components/ui/button"
 
 import {
@@ -22,7 +23,7 @@ export function FAQ() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline" className="size-8">❓</Button>
+        <Button variant="outline" className="bg-white size-8 absolute top-2 right-2">❓</Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-white">
         <AlertDialogHeader>

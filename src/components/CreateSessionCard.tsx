@@ -146,7 +146,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-w-2/3 md:h-1/2 h-2/3 overflow-auto bg-white">
         <DialogHeader>
-          <DialogTitle className="text-black font-bold">Create Study Session</DialogTitle>
+          <DialogTitle className=" cursor-pointer text-black font-bold">Create Study Session</DialogTitle>
 
         </DialogHeader>
         <Form {...form}>
