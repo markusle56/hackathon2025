@@ -43,8 +43,8 @@ export default function HomePage() {
   return (
     <main className="top-0 left-0 w-screen h-screen m-0 p-0 overflow-hidden relative">
       <ReactMapGL
-        initialViewState={viewState}
         className="w-full h-full"
+        initialViewState={viewState}
         mapStyle={mapStyle}
         onMove={handleMove}
       />
