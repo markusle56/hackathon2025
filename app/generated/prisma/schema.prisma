@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model post {
+  post_id     Int       @id @default(autoincrement())
+  description String
+  image_url   String?
+  start_time  DateTime? @map("start_time")
+  end_time    DateTime? @map("end_time")
+  latitude    Float?
+  longitude   Float?
+  slots       Int
+  joined      Int
+  terminate   Boolean?  @default(false)
+
+  // Relation to junction table
+  post_tags post_tag[]
+
+  @@map("post")
+}
+
+model defined_tag {
+  tag_id Int    @id @default(autoincrement())
+  tag    String @unique
+
+  // Relation to junction table
+  post_tags post_tag[]
+
+  @@map("definedtag")
+}
+
+model post_tag {
+  post_id Int
+  tag_id  Int
+
+  // Relations
+  post post        @relation(fields: [post_id], references: [post_id])
+  tag  defined_tag @relation(fields: [tag_id], references: [tag_id])
+
+  @@id([post_id, tag_id]) // Composite PK to avoid duplicates
+  @@map("post_tag") // Map to actual table name
+}
