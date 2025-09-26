@@ -1,45 +1,105 @@
-export default function SessionCard() {
-    const session = {
-        title: "Title",
-        description: "I'm working on WDC Practical 5. Really need some help atm.",
-        icons : ["/img/users-round.svg", "/img/clock.svg"],
-        people: 2,
-        capacity: 4,
-        start_time: "13:00",
-        end_time: "16:00",
-        tags: ["Computer Science", "WDC"]
-    };
-      
-    const tag = session.tags.map(tag => <li key={tag}>{tag}</li>);
-    
-    return (
-      <div className="max-w-3xs rounded-lg overflow-hidden border-solid border-black border-1 ">
-        {/* <ImageCarousel/> */}
+import { Post } from "@/lib/utilis";
 
-        <div className="px-6 py-4 pl-2">
-          <div className="font-bold text-xl mb-2">{session.title}</div>
-          <p className="text-gray-700 text-base">{session.description}</p>
-        </div>
-        <div className="pl-2">
-          <span><img src="/img/users-round.svg" alt="users icon" className="inline-block mr-1"/></span>
-          <span className="mr-4">{session.people}/{session.capacity}</span>
-          <span><img src={session.icons[1]} alt="clock icon" className="inline-block mr-1"/></span>
-          <span>{session.start_time} - {session.end_time}</span>
-        </div>
-        <div className="px-6 pt-4 pb-1 pl-2">
-          {session.tags.map(tag => (
-            <span
-                key={tag}
-                className="inline-block bg-gray-200 rounded-sm px-3 py-1 text-sm font-light text-gray-700 mr-2 mb-1">
-                {tag}
-            </span>
-         ))}
-        </div>
-        <div className="justify-center">
-          <button className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md w-60 mb-2 mx-auto block cursor-pointer">
-            Join this session
-          </button>
-        </div>
+type SessionCardProps = {
+  session: Post | null;
+  id: string;
+  setId: (id: string) => void;
+};
+
+export default function SessionCard({ session, id, setId }: SessionCardProps) {
+  if (!session) return null;
+  const icons = (session as any).icons ?? ["/img/users-round.svg", "/img/clock.svg"];
+
+  const joinHandler = async () => {
+    if (!session._id) {
+      console.error("Missing session id");
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/join`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId: session._id }),
+      });
+
+      const body = await res.json();
+
+      if (!res.ok) {
+        console.error("Failed to join:", body);
+        return;
+      }
+      if (id) {
+        try {
+          // call the terminate route that expects ?id=...
+          const termRes = await fetch(`/api/post/terminate?id=${encodeURIComponent(id)}`, {
+            method: "GET",
+          });
+
+          const termBody = await termRes.json().catch(() => null);
+
+          if (!termRes.ok) {
+            console.warn("Terminate failed:", termRes.status, termBody);
+          } else {
+            // route returns { status: 200, ... } on success — clear parent route id
+            if (termBody && termBody.status === 200) {
+              setId("");
+            } else {
+              console.warn("Terminate response unexpected:", termBody);
+            }
+          }
+        } catch (err) {
+          console.warn("Failed to terminate route id:", err);
+        }
+      }
+      window.location.reload()
+    } catch (err) {
+      console.error("joinHandler error:", err);
+    }
+  };
+
+  const fmtTime = (t: string | Date) =>
+    new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
+  return (
+    <div className="max-w-3xs rounded-lg overflow-hidden border border-black">
+      <div className="px-4 py-3">
+        <div className="font-bold text-xl mb-1">{session.title ?? "Untitled"}</div>
+        <p className="text-gray-700 text-sm">{session.description ?? ""}</p>
       </div>
+
+      <div className="px-4 pb-2 text-sm text-gray-700 flex items-center gap-4">
+        <span className="flex items-center gap-1">
+          <img src={icons[0]} alt="users" className="inline-block w-4 h-4" />
+          <span>{session.people ?? 0}/{session.capacity ?? 0}</span>
+        </span>
+
+        <span className="flex items-center gap-1">
+          <img src={icons[1]} alt="clock" className="inline-block w-4 h-4" />
+          <span>{fmtTime(session.start_time)} - {fmtTime(session.end_time)}</span>
+        </span>
+      </div>
+
+      <div className="px-4 pt-2 pb-3">
+        {(session.tags ?? []).map((tag) => (
+          <span
+            key={tag}
+            className="inline-block bg-gray-200 rounded-sm px-3 py-1 text-sm text-gray-700 mr-2 mb-1"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div className="px-4 pb-4">
+        <button
+          onClick={joinHandler}
+          className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md w-full"
+          aria-label="Join this session"
+        >
+          Join this session
+        </button>
+      </div>
+    </div>
   );
 }
