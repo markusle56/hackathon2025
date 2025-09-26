@@ -36,12 +36,12 @@ const formSchema = z.object({
   start_time: z.string().min(1, "Start time is required").regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
   end_time: z.string().min(1, "End time is required").regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
   capacity: z.coerce.number().min(1, "Capacity at least 1").max(50, "Capacity max 50"),
-  tags: z.string().optional().or(z.literal("")),
-  files: z.instanceof(File).array().optional().or(z.literal(undefined)).refine(
+  tags: z.string().optional(),
+  files: z.array(z.any()).optional().refine(
     (files) => !files || files.length <= 1,
     { message: "Only 1 image allowed" }
   ).refine(
-    (files) => !files || files.every((file) => file.type.startsWith("image/")),
+    (files) => !files || files.every((file: any) => typeof file?.type === "string" && file.type.startsWith("image/")),
     { message: "Only image files allowed" }
   ),
   id: z.string().optional(), 
@@ -53,7 +53,9 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-export function CreateSessionCard() {
+type CreateSessionCardProps = { longitude?: number; latitude?: number };
+
+export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSessionCardProps) {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<File[] | undefined>(undefined);
 
@@ -76,9 +78,8 @@ export function CreateSessionCard() {
 
   const handleDrop = (droppedFiles: File[]) => {
     setFiles(droppedFiles);
-    form.setValue("files", droppedFiles); 
+    form.setValue("files", droppedFiles as any);
   };
-  // Bao do this part pls
   async function onSubmit(values: FormData) {
     const submittedData = {
       ...values,
@@ -98,13 +99,13 @@ export function CreateSessionCard() {
       formData.append("description", submittedData.description);
       formData.append("start_time", submittedData.start_time);
       formData.append("end_time", submittedData.end_time);
-      formData.append("capacity", submittedData.capacity.toString());
+      formData.append("capacity", String(submittedData.capacity));
       formData.append("tags", submittedData.tags.join(","));
       formData.append("id", submittedData.id);
-      formData.append("lat", submittedData.lat?.toString() || "0");
-      formData.append("long", submittedData.long?.toString() || "0");
+      formData.append("lat", String(latitude ?? 0));
+      formData.append("long", String(longitude ?? 0));
       formData.append("terminate", submittedData.terminate.toString());
-      submittedData.files.forEach((file) => formData.append("images", file));
+      formData.append("file", submittedData.files[0]);
 
       try {
         const response = await fetch("/api/post/submit", {
@@ -124,10 +125,14 @@ export function CreateSessionCard() {
       }
     } else {
       await fetch("/api/post/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(submittedData),
-      });
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...submittedData,
+          lat: String(submittedData.lat ?? latitude ?? 0),
+          long: String(submittedData.long ?? longitude ?? 0),
+        }),
+       });
       form.reset();
       setFiles(undefined);
       setOpen(false);
@@ -139,9 +144,9 @@ export function CreateSessionCard() {
       <DialogTrigger asChild>
         <Button variant="outline" className="bg-white text-black">Create Study Session</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] bg-white">
+      <DialogContent className="sm:max-w-[425px] max-w-2/3 md:h-1/2 h-2/3 overflow-auto bg-white">
         <DialogHeader>
-          <DialogTitle>Create Study Session</DialogTitle>
+          <DialogTitle className="text-black font-bold">Create Study Session</DialogTitle>
 
         </DialogHeader>
         <Form {...form}>

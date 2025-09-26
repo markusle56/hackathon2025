@@ -180,8 +180,11 @@ export default function HomePage() {
       <div className="absolute top-5 left-5 z-5">
         <SuggestionsBox posts={posts} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
       </div>
+      <div className="absolute sm:bottom-1 left-1/2 -translate-x-1/2 bottom-10 z-50 w-1/12 sm:max-w-20">
+        <img src="/NexusS_blue.svg" className="w-full" alt="Logo"></img>
+      </div>
       <div className="absolute bottom-12 right-5 z-5">
-        <CreateSessionCard/>
+        <CreateSessionCard longitude={longitude} latitude={latitude}/>
       </div>
     </main>
   );

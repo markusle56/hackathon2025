@@ -10,8 +10,8 @@ export async function POST(request: Request) {
     const description = formData.get("description") as string;
     const lat = parseFloat(formData.get("lat") as string);
     const long = parseFloat(formData.get("long") as string);
-    const start_time = parseInt(formData.get("start_time") as string);
-    const end_time = parseInt(formData.get("end_time") as string);
+    const start_time = new Date(parseInt(formData.get("start_time") as string));
+    const end_time = new Date(parseInt(formData.get("end_time") as string));
     const capacity = parseInt(formData.get("slots") as string);
 
     if (!title || !description || isNaN(lat) || isNaN(long)) {

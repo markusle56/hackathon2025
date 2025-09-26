@@ -22,14 +22,14 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
     };
 
     return (
-        <div className='bg-white rounded-md flex flex-col gap-2 p-2 outline-1 outline-black max-h-1/2 '>
+        <div className='bg-white rounded-md md:flex md:flex-col gap-2 p-2 outline-1 outline-black max-h-1/2 hidden'>
             <h1 className="text-center text-xl font-bold">Suggestions</h1>
             {posts.length > 0 && (
                 <div className="gap-y-1 flex flex-col overflow-y-auto h-50">
                 {posts.map((post, idx) => (
                     <Button
                         key={post._id ?? idx}
-                        className={`flex flex-row py-2 h-auto text-black border-1 border-gray-500 hover:bg-white hover:border-2 ${selectedPost?._id === post._id ? 'bg-gray hover:bg-gray' : 'bg-white'}`}
+                        className={`flex flex-row py-2 h-auto text-black border-1 border-gray-500 hover:bg-white hover:border-2 justify-between items-center ${selectedPost?._id === post._id ? 'bg-gray hover:bg-gray' : 'bg-white'}`}
                         onClick={() => handleClick(post)}
                     >
                         <div className="flex flex-col text-left w-1/2 truncate">
@@ -44,7 +44,7 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
                             ))}
                         </div>
                         <div className="flex flex-col w-1/4 h-5">
-                            <img src="/img/users-round.svg" className="p-0" alt="Icon"></img>
+                            <img src="/img/users-round.svg" className="p-0 h-full" alt="Icon"></img>
                             <p>{post.people}/{post.capacity}</p>
                         </div>
                     </Button>
