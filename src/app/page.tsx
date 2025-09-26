@@ -48,7 +48,7 @@ export default function HomePage() {
           
         </Map>
 
-      <div className="absolute top-0 left-0 z-5">
+      <div className="absolute top-5 left-5 z-5">
         <SuggestionsBox/>
       </div>
     </main>
