@@ -20,14 +20,12 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
         d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); 
       return `${fmt(s)} - ${fmt(e)}`;
     };
-    
-    if (posts.length == 0) {
-        return (<></>)
-    }
+
     return (
-        <div className='bg-white rounded-md flex flex-col gap-2 p-2 outline-1 outline-black max-h-1/2 h-50'>
+        <div className='bg-white rounded-md flex flex-col gap-2 p-2 outline-1 outline-black max-h-1/2 '>
             <h1 className="text-center text-xl font-bold">Suggestions</h1>
-            <div className="gap-y-1 flex flex-col overflow-y-auto">
+            {posts.length > 0 && (
+                <div className="gap-y-1 flex flex-col overflow-y-auto h-50">
                 {posts.map((post, idx) => (
                     <Button
                         key={post._id ?? idx}
@@ -46,15 +44,15 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
                             ))}
                         </div>
                         <div className="flex flex-col w-1/4 h-5">
-                            <img src="/user-browse.svg" className="p-0" alt="Icon"></img>
+                            <img src="/img/users-round.svg" className="p-0" alt="Icon"></img>
                             <p>{post.people}/{post.capacity}</p>
                         </div>
                     </Button>
                 ))}
             </div>
-
+            )}
             {posts.length === 0 && (
-              <div className="text-sm text-gray-600">No suggestions</div>
+              <div className="text-sm text-gray-600 w-50 text-center">No suggestions</div>
             )}
         </div>
     )

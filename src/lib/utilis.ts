@@ -69,5 +69,5 @@ export function calculateScore(currPost: Post, posts: Post[]): Post[] {
 
   scores.sort((a, b) => b.score - a.score); 
 
-  return scores.slice(0, 5).map(s => s.post);
+  return scores.slice(0, 10).map(s => s.post);
 }

@@ -24,19 +24,46 @@ export default function HomePage() {
   const [id, setId] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
+  const [longitude, setLongitude] = useState<number>(138.60470581054688)
+  const [latitude, setLatitude] = useState<number>(-34.9196319580078)
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/api/post");
-        if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
-        const { status, data } = await res.json();
-        setPosts(data);
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async (position) => {
+              const lon = position.coords.longitude;
+              const lat = position.coords.latitude;
+              setLongitude(lon);
+              setLatitude(lat);
+
+              const params = new URLSearchParams();
+              if (id) {
+                params.set("id", id);
+              } else {
+                params.set("longitude", String(lon));
+                params.set("latitude", String(lat));
+              }
+
+              const res = await fetch(`/api/post/suggestion?${params.toString()}`);
+              if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+              const { status, data } = await res.json();
+              setPosts(data ?? []);
+            }
+          );
+        } else {
+          const params = new URLSearchParams();
+          if (id) params.set("id", id);
+          const res = await fetch(`/api/post/suggestion?${params.toString()}`);
+          if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+          const { data } = await res.json();
+          setPosts(data ?? []);
+        }
       } catch (err) {
         console.error(err);
       }
     })();
-  }, [id]);
+  }, [id, latitude, longitude]);
 
   useEffect(() => {
     if (!selectedPost?.long || !selectedPost?.lat || !mapRef.current) {

@@ -10,9 +10,10 @@ export async function GET(req: Request) {
         const now = new Date();
         const url = new URL(req.url);
         const id = url.searchParams.get("id");
-
+        const longitude = url.searchParams.get("longitude");
+        const latitude = url.searchParams.get("latitude");
         if (!id) {
-            throw Error("No id found!")
+            throw Error("I'm doing that")
         }
         const client = await clientPromise;
         const db = client.db();
@@ -61,10 +62,10 @@ export async function GET(req: Request) {
             terminate: Boolean(currPost.terminate ?? false),
         };
 
-        const topFive = calculateScore(curr, posts);
+        const topMatch = calculateScore(curr, posts);
 
         return NextResponse.json(
-            {status: 200, data: topFive}
+            {status: 200, data: topMatch}
         );
     } catch (err: any) {
         return NextResponse.json(
