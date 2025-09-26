@@ -1,13 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import dynamic from "next/dynamic";
 import type { ViewState, ViewStateChangeEvent } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { SuggestionsBox } from "@/components/SuggestionsBox";
 import { Map, Marker, Popup } from 'react-map-gl/maplibre';
 import { Post } from "@/lib/utilis";
-import { PiFinnTheHumanFill } from "react-icons/pi";
 import { GiPlasticDuck } from "react-icons/gi";
 import { FaLocationDot } from "react-icons/fa6";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
