@@ -26,7 +26,7 @@ export async function GET(req: Request) {
       { returnDocument: "after" } 
     );
 
-    if (!updated.value) {
+    if (!updated || !updated.value) {
       return NextResponse.json(
         { error: "Cannot find the post!" },
         { status: 404 }
