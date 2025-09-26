@@ -10,6 +10,7 @@ import { Post } from "@/lib/utilis";
 import { LuCircleUserRound } from "react-icons/lu";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
 import SessionCard from "@/components/SessionCard";
+import { MdMyLocation } from 'react-icons/md';
 
 const PICKEDZOOM: number = 15;
 
@@ -145,7 +146,7 @@ export default function HomePage() {
         {posts.map((post, idx) => (
           <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
             <LuCircleUserRound 
-              className="text-blue-500 text-2xl cursor-pointer" 
+              className="text-white text-2xl cursor-pointer" 
               onClick={(e) => {
                 e.stopPropagation();
                 handleMarkerClick(post);
@@ -153,6 +154,13 @@ export default function HomePage() {
             />
           </Marker>
         ))}
+        <Marker anchor='center' longitude={longitude} latitude={latitude}>
+            <MdMyLocation
+              className="text-blue text-2xl" 
+            />
+        </Marker>
+
+        
 
         {selectedPost && (
           <Popup
