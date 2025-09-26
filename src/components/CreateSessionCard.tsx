@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   Form,
   FormControl,
@@ -48,6 +49,21 @@ const formSchema = z.object({
   lat: z.number().optional(),
   long: z.number().optional(),
   terminate: z.boolean().default(false), 
+})
+.refine((data) => {
+  const toMinutes = (t?: string) => {
+    if (!t) return NaN;
+    const [h, m] = t.split(":").map((v) => Number(v));
+    return h * 60 + m;
+  };
+  const s = toMinutes(data.start_time);
+  const e = toMinutes(data.end_time);
+  
+  if (isNaN(s) || isNaN(e)) return true;
+  return s < e;
+}, {
+  message: "Start time must be before end time",
+  path: ["end_time"], 
 });
 
 
@@ -94,6 +110,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
 
 
     if (submittedData.files && submittedData.files.length > 0) {
+      
       const formData = new FormData();
       formData.append("title", submittedData.title);
       formData.append("description", submittedData.description);
@@ -108,6 +125,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
       formData.append("file", submittedData.files[0]);
 
       try {
+        console.log(submittedData.start_time)
         const response = await fetch("/api/post/submit", {
           method: "POST",
           body: formData,
@@ -207,7 +225,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
                 control={form.control}
                 name="end_time"
                 render={({ field }) => (
-                  <FormItem className="flex flex-col">
+                  <FormItem className="flex flex-col relative">
                     <FormLabel>End Time</FormLabel>
                     <FormControl>
                       <Input
@@ -218,7 +236,9 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <div className="fixed top-4 right-4 z-50">
+                      <FormMessage className="bg-red-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slide-in" />
+                    </div>
                   </FormItem>
                 )}
               />
@@ -232,7 +252,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
                     <FormControl>
                       <Input type="number" min="1" max="50" placeholder="4" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage/>
                   </FormItem>
                 )}
               />

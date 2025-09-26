@@ -63,6 +63,9 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
 
   return (
     <div className="max-w-3xs rounded-lg overflow-hidden border border-black">
+      {session.img && (<div className="px-4 py-3">
+        <img src={session.img} alt="Illustration session spots}"></img>
+      </div>)}
       <div className="px-4 py-3">
         <div className="font-bold text-xl mb-1">{session.title ?? "Untitled"}</div>
         <p className="text-gray-700 text-sm">{session.description ?? ""}</p>
