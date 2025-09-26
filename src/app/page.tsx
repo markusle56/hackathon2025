@@ -8,6 +8,7 @@ import { SuggestionsBox } from "@/components/SuggestionsBox";
 import { Map, Marker } from 'react-map-gl/maplibre';
 import { Post } from "@/lib/utilis";
 import { LuCircleUserRound } from "react-icons/lu";
+import { CreateSessionCard } from "@/components/CreateSessionCard";
 
 const PICKEDZOOM: number = 15;
 
@@ -103,6 +104,9 @@ export default function HomePage() {
 
       <div className="absolute top-5 left-5 z-5">
         <SuggestionsBox posts={posts} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
+      </div>
+      <div className="absolute bottom-12 right-5 z-5">
+        <CreateSessionCard/>
       </div>
     </main>
   );
