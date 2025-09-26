@@ -5,10 +5,11 @@ import dynamic from "next/dynamic";
 import type { ViewState, ViewStateChangeEvent } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { SuggestionsBox } from "@/components/SuggestionsBox";
-import { Map, Marker } from 'react-map-gl/maplibre';
+import { Map, Marker, Popup } from 'react-map-gl/maplibre';
 import { Post } from "@/lib/utilis";
 import { LuCircleUserRound } from "react-icons/lu";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
+import SessionCard from "@/components/SessionCard";
 
 const PICKEDZOOM: number = 15;
 
@@ -115,6 +116,25 @@ export default function HomePage() {
     });
   };
 
+  const getSessionData = (post: Post) => ({
+    title: post.title,
+    description: post.description,
+    icons: ["/img/users-round.svg", "/img/clock.svg"],
+    people: post.people,
+    capacity: post.capacity,
+    start_time: post.start_time,
+    end_time: post.end_time,
+    tags: post.tags
+  });
+
+  const handleMarkerClick = (post: Post) => {
+    setSelectedPost(post);
+  };
+
+  const handlePopupClose = () => {
+    setSelectedPost(null);
+  };
+
   return (
     <main className="top-0 left-0 w-screen h-screen m-0 p-0 overflow-hidden relative">
       <Map
@@ -124,9 +144,28 @@ export default function HomePage() {
         mapStyle={mapStyle}>
         {posts.map((post, idx) => (
           <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
-            <LuCircleUserRound />
+            <LuCircleUserRound 
+              className="text-blue-500 text-2xl cursor-pointer" 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleMarkerClick(post);
+              }}
+            />
           </Marker>
         ))}
+
+        {selectedPost && (
+          <Popup
+            longitude={selectedPost.long}
+            latitude={selectedPost.lat}
+            anchor="left"
+            closeOnClick={true}
+            onClose={handlePopupClose}
+            className="custom-popup"
+          >
+            <SessionCard session={getSessionData(selectedPost)} />
+          </Popup>
+        )}
       </Map>
 
       <div className="absolute top-5 left-5 z-5">
