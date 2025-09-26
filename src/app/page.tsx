@@ -15,11 +15,13 @@ export default function HomePage() {
     zoom: 14,
   });
   const [id, setId] = useState("");
-  const [posts, setPosts] = useState<Post[]>()
+  const [posts, setPosts] = useState<Post[]>([])
+  const [selectedPost, setSelectedPost] = useState<Post | null>(null)
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/api/post/suggestion");
+        // const res = await fetch("/api/post/suggestion");
+        const res = await fetch("/api/post");
         if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
         const {status, data} = await res.json();
         setPosts(data)
@@ -62,7 +64,7 @@ export default function HomePage() {
       </Map>
 
       <div className="absolute top-5 left-5 z-5">
-        <SuggestionsBox/>
+        <SuggestionsBox posts={posts} selectedPost={selectedPost} setSelectedPost={setSelectedPost}/>
       </div>
     </main>
   );
