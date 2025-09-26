@@ -14,17 +14,33 @@ export async function POST(request: Request) {
     const db = client.db();
     const postsCollection = db.collection("post");
 
-    const result = await postsCollection.updateOne(
-      { _id: new ObjectId(postId) },
-      { $inc: { joined: 1 } }
-    );
-
-    if (result.matchedCount === 0) {
+    const post = await postsCollection.findOne({ _id: new ObjectId(postId) });
+    if (!post) {
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true });
+    if (typeof post.slots === "number" && typeof post.people === "number") {
+      if (post.people >= post.slots) {
+        return NextResponse.json({ error: "No slots available" }, { status: 403 });
+      }
+    }
+
+    const result = await postsCollection.findOneAndUpdate(
+      { _id: new ObjectId(postId) },
+      { $inc: { people: 1 } },
+      { returnDocument: "after" } // return updated doc
+    );
+
+    if (!result) {
+      return NextResponse.json({ error: "Failed to update" }, { status: 500 });
+    }
+
+    return NextResponse.json({
+      success: true,
+      updatedPost: result.value,
+    });
   } catch (err) {
+    console.error("Join route error:", err);
     const message = err instanceof Error ? err.message : "SERVER ERROR";
     return NextResponse.json({ error: message }, { status: 500 });
   }

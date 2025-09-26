@@ -25,8 +25,9 @@ export async function GET(req: Request) {
       { $set: { terminate: true } },
       { returnDocument: "after" } 
     );
+    console.log(updated);
 
-    if (!updated || !updated.value) {
+    if (!updated || !updated.terminate) {
       return NextResponse.json(
         { error: "Cannot find the post!" },
         { status: 404 }
