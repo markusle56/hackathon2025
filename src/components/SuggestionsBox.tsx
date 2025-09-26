@@ -31,22 +31,23 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
                 {posts.map((post, idx) => (
                     <Button
                         key={post._id ?? idx}
-                        className={`flex flex-row py-2 h-auto ${selectedPost?._id === post._id ? 'bg-black text-white' : 'bg-gray-400'}`}
+                        className={`flex flex-row py-2 h-auto text-black border-1 border-gray-500 hover:bg-white hover:border-2 ${selectedPost?._id === post._id ? 'bg-gray hover:bg-gray' : 'bg-white'}`}
                         onClick={() => handleClick(post)}
                     >
-                        <div className="flex flex-col text-left">
+                        <div className="flex flex-col text-left w-1/2 truncate">
                             <h1 className="text-base">{post.title ?? "Untitled"}</h1>
                             <p className="text-sm">
                               {formatHourRange(post)}
                             </p>
                         </div>
-                        <div className="flex flex-col gap-2 ml-4">
+                        <div className="flex flex-col gap-2 ml-4 w-1/4 truncate">
                             {post.tags?.slice(0,2).map((t, i) => (
-                              <p key={i} className="bg-gray-600 p-1 rounded-lg">{t.slice(0,1).toUpperCase()}{t.slice(1)}</p>
+                              <p key={i} className="bg-gray-300 p-1 p-x-4 rounded-lg truncate">{t.slice(0,1).toUpperCase()}{t.slice(1)}</p>
                             ))}
                         </div>
-                        <div>
-                            {/* <img src="/NexusS_blue.svg" className="w-1/10"></img> */}
+                        <div className="flex flex-col w-1/4 h-5">
+                            <img src="/user-browse.svg" className="p-0" alt="Icon"></img>
+                            <p>{post.people}/{post.capacity}</p>
                         </div>
                     </Button>
                 ))}
