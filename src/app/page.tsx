@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import type { ViewState, ViewStateChangeEvent } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { SuggestionsBox } from "@/components/SuggestionsBox";
-import {Map} from 'react-map-gl/maplibre'
+import {Map} from 'react-map-gl/maplibre';
+import { Post } from "@/lib/utilis";
 
 export default function HomePage() {
   const [viewState, setViewState] = useState<MapViewState>({
@@ -13,7 +14,20 @@ export default function HomePage() {
     latitude: -34.91963195800781,
     zoom: 14,
   });
-
+  const [id, setId] = useState("");
+  const [posts, setPosts] = useState<Post[]>()
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/post/suggestion");
+        if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
+        const {status, data} = await res.json();
+        setPosts(data)
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [id]);
   const mapStyle = `https://api.maptiler.com/maps/019984ee-14dd-7faa-b27e-af15bfe1bed2/style.json?key=${process.env.NEXT_PUBLIC_MAP_API}`
 
   const handleMove = (evt: ViewStateChangeEvent) => {
@@ -37,16 +51,15 @@ export default function HomePage() {
     });
   };
 
+  
   return (
     <main className="top-0 left-0 w-screen h-screen m-0 p-0 overflow-hidden relative">
       <Map
-        className="w-full h-full"
         initialViewState={viewState}
         mapStyle={mapStyle}
         onMove={handleMove}>
-
           
-        </Map>
+      </Map>
 
       <div className="absolute top-5 left-5 z-5">
         <SuggestionsBox/>
