@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import clientPromise from "@/lib/mongodb";
 import { supabase } from "@/lib/supabase";
+import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   try {
@@ -68,11 +69,34 @@ export async function POST(request: Request) {
       terminate: false,
     });
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       postId: newPost.insertedId,
       img: imageUrl,
     });
+    const cookieStore = await cookies();
+    const existingCookie = cookieStore.get("postIds")?.value;
+
+    let postIds: string[] = [];
+    if (existingCookie) {
+      try {
+        postIds = JSON.parse(existingCookie);
+      } catch {
+        postIds = [];
+      }
+    }
+
+    // Add new postId
+    postIds.push(newPost.insertedId.toString());
+
+    // Save back to cookies with expiry = end_time
+    response.cookies.set("postIds", JSON.stringify(postIds), {
+      httpOnly: false,
+      path: "/",
+      expires: end_time,
+    });
+
+    return response;
   } catch (err) {
     console.error("Error creating post:", err);
     const message = err instanceof Error ? err.message : "SERVER ERROR";

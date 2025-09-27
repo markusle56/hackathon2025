@@ -10,6 +10,7 @@ import { GiPlasticDuck } from "react-icons/gi";
 import { FaLocationDot } from "react-icons/fa6";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
 import SessionCard from "@/components/SessionCard";
+import PostWatcher from "@/components/PostWatcher";
 
 import { FAQ } from '@/components/FAQ';
 
@@ -192,6 +193,7 @@ export default function HomePage() {
       <div className="absolute top-4 right-3 z-8 ">
         <FAQ></FAQ>
       </div>
+      <PostWatcher />
     </main>
   );
 }
