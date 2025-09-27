@@ -92,7 +92,7 @@ export const Dropzone = ({
         variant="outline"
         {...getRootProps()}
       >
-        <input {...getInputProps()} disabled={disabled} />
+        <input {...getInputProps()} disabled={disabled}  capture="environment" />
         {children}
       </Button>
     </DropzoneContext.Provider>
