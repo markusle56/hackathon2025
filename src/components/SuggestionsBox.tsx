@@ -23,7 +23,7 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
 
     return (
         <div className="bg-white rounded-md shadow-md p-3 outline-1 outline-gray-200 md:w-80 w-11/12 max-h-[60vh] flex flex-col gap-3">
-            <h2 className="text-center text-lg font-semibold">Suggestions</h2>
+            <h2 className="text-center text-lg font-semibold">💡 Suggestions</h2>
 
             {posts.length > 0 ? (
               <div className="flex flex-col gap-2 overflow-y-auto">

@@ -170,11 +170,11 @@ export function CreateSessionCard({ longitude = 0, latitude = 0, setMySession }:
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="bg-white text-black">Create Study Session</Button>
+        <Button variant="outline" className="bg-white text-black">📝 Create Study Session</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] max-w-2/3 md:h-1/2 h-2/3 overflow-auto bg-white">
         <DialogHeader>
-          <DialogTitle className=" cursor-pointer text-black font-bold">Create Study Session</DialogTitle>
+          <DialogTitle className="cursor-pointer text-black font-bold text-center">📚 Create Study Session</DialogTitle>
 
         </DialogHeader>
         <Form {...form}>

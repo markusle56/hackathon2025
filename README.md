@@ -33,18 +33,6 @@ This way, NexusS helps uni students find study buddies and make new friends.
 
 ```
 npm install
-```
-
-Create a `.env` file in the root directory containing this code snippet
-```
-// /root/.env
-MONGODB_URI = "mongodb+srv://nexusS_user_1:ececec@nexuss.26szun1.mongodb.net/?retryWrites=true&w=majority&appName=NexusS"
-NEXT_PUBLIC_MAP_API=HvPvo6hcWeibKxwaXMo8
-NEXT_PUBLIC_SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bWdoZHd1anR6bnludHBnZHNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODQ5MzMsImV4cCI6MjA3NDQ2MDkzM30.ewLgiNOTpFnH1FDiREL_pcYUDdHSG_o4j1cVn0G_PYo
-NEXT_PUBLIC_SUPABASE_URL = https://kzmghdwujtznyntpgdsc.supabase.co/
-```
-
-```
 npm run dev
 ```
 

@@ -81,7 +81,7 @@ export default function SessionCard({ session, mySession, setMySession, handlePo
     <>
       <div className="w-[300px] rounded-lg overflow-hidden">
         {session.img && (
-          <div className="px-2 py-1">
+          <div className="px-2 py-1 flex justify-center">
             <img src={session.img} alt="Illustration session spots" />
           </div>
         )}

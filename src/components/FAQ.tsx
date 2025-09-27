@@ -48,7 +48,7 @@ export function FAQ() {
                     <AccordionTrigger className="font-semibold cursor-pointer">🔐 Do I need an account?</AccordionTrigger>
                     <AccordionContent className="flex flex-col gap-4">
                         <p>
-                            Not yet — just open the app to browse nearby sessions or host one. (Profiles coming soon.)
+                            No! Just open the app to browse nearby sessions or host one.
                         </p>
                     </AccordionContent>
                 </AccordionItem>
