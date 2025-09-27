@@ -5,7 +5,7 @@ import type { ViewState, ViewStateChangeEvent } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { SuggestionsBox } from "@/components/SuggestionsBox";
 import { Map, Marker, Popup } from 'react-map-gl/maplibre';
-import { Post } from "@/lib/utilis";
+import {Post}  from "@/lib/utilis";
 import { GiPlasticDuck } from "react-icons/gi";
 import { FaLocationDot } from "react-icons/fa6";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
@@ -28,6 +28,7 @@ export default function HomePage() {
     padding: { left: 0, right: 0, top: 0, bottom: 0 },
   });
   const [mySession, setMySession] = useState("");
+  const [myPost, setMyPost] = useState<Post | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [longitude, setLongitude] = useState<number>(138.60470581054688)
@@ -65,6 +66,20 @@ export default function HomePage() {
           if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
           const { data } = await res.json();
           setPosts(data ?? []);
+        }
+        if (mySession) {
+          try {
+            const params = new URLSearchParams()
+            params.set("id", mySession);
+            const res = await fetch(`api/post?${params.toString()}`);
+            if (!res.ok) throw new Error('Fetch my session failed');
+            const { data } = await res.json();
+            setMyPost(data);
+          } catch (err) {
+            console.error(err);
+          }
+        } else {
+          setMyPost(null)
         }
       } catch (err) {
         console.error(err);
@@ -148,21 +163,8 @@ export default function HomePage() {
         initialViewState={viewState}
         onMoveEnd={handleMoveEnd}
         mapStyle={mapStyle}>
-        {posts.map((post, idx) => {
-          if (mySession && mySession == post._id) {
-            return (
-              <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
-                <GiPlasticDuck 
-                  className="text-green-600 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleMarkerClick(post);
-                  }}
-                />
-              </Marker>
-            )
-          } else {
-            return (
+        {posts.map((post, idx) => 
+          (  
               <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
                 <GiPlasticDuck 
                   className="text-yellow-300 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
@@ -173,8 +175,18 @@ export default function HomePage() {
                 />
               </Marker>
             )
-          }
-        } 
+        )}
+        { myPost && (
+          <Marker anchor='center' longitude={myPost.long} latitude={myPost.lat}>
+            <GiPlasticDuck 
+              className="text-green-500 text-3xl " 
+              onClick={(e) => {
+                    e.stopPropagation();
+                    handleMarkerClick(myPost);
+                  }}
+            />
+          </Marker>
+
         )}
         <Marker anchor='center' longitude={longitude} latitude={latitude}>
             <FaLocationDot

@@ -110,19 +110,19 @@ export default function SessionCard({ session, mySession, setMySession }: Sessio
           ))}
         </div>
 
-        <div className="px-4 pb-4 flex gap-2">
+        <div className="px-4 pb-4 flex">
+          {mySession != session._id && (
           <button
             onClick={joinHandler}
             className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md flex-1"
             aria-label="Join this session"
           >
             Join this session
-          </button>
-
+          </button>)}
           {mySession === session._id && (
             <button
               onClick={terminateSession}
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md w-full"
               aria-label="Terminate session"
               type="button"
             >
