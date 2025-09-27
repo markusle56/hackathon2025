@@ -10,7 +10,8 @@ import { GiPlasticDuck } from "react-icons/gi";
 import { FaLocationDot } from "react-icons/fa6";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
 import SessionCard from "@/components/SessionCard";
-import { Button } from "@/components/ui/button"import PostWatcher from "@/components/PostWatcher";
+import { Button } from "@/components/ui/button"
+import PostWatcher from "@/components/PostWatcher";
 
 import { FAQ } from '@/components/FAQ';
 
