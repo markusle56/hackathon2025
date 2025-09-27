@@ -16,8 +16,8 @@ export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPos
     const fmtTime = (d: Date) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 
     const formatHourRange = (p: Post) => {
-      const s = toDate(p.start_time as any);
-      const e = toDate(p.end_time as any);
+      const s = toDate(p.start_time);
+      const e = toDate(p.end_time);
       return `${fmtTime(s)} - ${fmtTime(e)}`;
     };
 
