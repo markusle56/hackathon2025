@@ -32,6 +32,7 @@ This way, NexusS helps uni students find study buddies and make new friends.
 ### Other tools:
 - MapLibre: maps and locations display
 - Zod: input validation for the study session form
+- Maptiler Cloud: map source and styling
 
 ## Features
 - Browse nearby study sessions based on course or interest
