@@ -11,7 +11,7 @@ type SessionCardProps = {
 export default function SessionCard({ session, id, setId }: SessionCardProps) {
   const [notif, setNotif] = useState<string | null>(null);
   if (!session) return null;
-  const icons = (session as any).icons ?? ["/img/users-round.svg", "/img/clock.svg"];
+  const icons = ["/img/users-round.svg", "/img/clock.svg"];
   
   const handleNoti = () => {
     setNotif(null)

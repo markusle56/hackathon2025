@@ -9,7 +9,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -29,6 +28,7 @@ import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/s
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 import { JoinNotification } from "@/components/JoinNotification";
+import type { Resolver } from "react-hook-form";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title too long"),
@@ -37,11 +37,12 @@ const formSchema = z.object({
   end_time: z.string().min(1, "End time is required").regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
   capacity: z.coerce.number().min(1, "Capacity at least 1").max(50, "Capacity max 50"),
   tags: z.string().optional(),
-  files: z.array(z.any()).optional().refine(
-    (files) => !files || files.length <= 1,
+  // files must be File instances (client-side)
+  files: z.array(z.instanceof(File)).optional().refine(
+    (files?: File[] | undefined) => !files || files.length <= 1,
     { message: "Only 1 image allowed" }
   ).refine(
-    (files) => !files || files.every((file: any) => typeof file?.type === "string" && file.type.startsWith("image/")),
+    (files?: File[] | undefined) => !files || files.every((file: File) => typeof file.type === "string" && file.type.startsWith("image/")),
     { message: "Only image files allowed" }
   ),
   id: z.string().optional(), 
@@ -75,7 +76,8 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
   const [files, setFiles] = useState<File[] | undefined>(undefined);
   const [notif, setNotif] = useState<string | null>(null);
   const form = useForm<FormData>({
-    resolver: zodResolver(formSchema),
+    // cast zodResolver to the correct Resolver<FormData> type to satisfy TS
+    resolver: zodResolver(formSchema) as unknown as Resolver<FormData>,
     defaultValues: {
       title: "",
       description: "",
@@ -97,7 +99,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
   }
   const handleDrop = (droppedFiles: File[]) => {
     setFiles(droppedFiles);
-    form.setValue("files", droppedFiles as any);
+    form.setValue("files", droppedFiles as File[]);
   };
   async function onSubmit(values: FormData) {
     const submittedData = {

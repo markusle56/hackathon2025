@@ -84,6 +84,7 @@ export default function HomePage() {
       zoom: PICKEDZOOM,
       bearing: 0,
       pitch: 0,
+      padding: viewState.padding ?? { left: 0, right: 0, top: 0, bottom: 0 },
     };
 
     console.log('Flying map to:', newViewState);
