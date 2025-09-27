@@ -26,7 +26,6 @@ import {
 import { Dropzone, DropzoneContent, DropzoneEmptyState } from "@/components/ui/shadcn-io/dropzone";
 
 import * as React from "react";
-import { ChevronDownIcon } from "lucide-react";
 import { JoinNotification } from "@/components/JoinNotification";
 import type { Resolver } from "react-hook-form";
 
@@ -76,7 +75,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
   const [files, setFiles] = useState<File[] | undefined>(undefined);
   const [notif, setNotif] = useState<string | null>(null);
   const form = useForm<FormData>({
-    // cast zodResolver to the correct Resolver<FormData> type to satisfy TS
+    
     resolver: zodResolver(formSchema) as unknown as Resolver<FormData>,
     defaultValues: {
       title: "",

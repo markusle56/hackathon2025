@@ -51,7 +51,7 @@ export default function HomePage() {
 
               const res = await fetch(`/api/post/suggestion?${params.toString()}`);
               if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
-              const { status, data } = await res.json();
+              const { data } = await res.json();
               setPosts(data ?? []);
             }
           );
@@ -185,11 +185,11 @@ export default function HomePage() {
       <div className="absolute sm:bottom-1 left-1/2 -translate-x-1/2 bottom-10 z-50 w-1/12 sm:max-w-20">
         <img src="/NexusS_blue.svg" className="w-full" alt="Logo"></img>
       </div>
-      <div className="absolute bottom-12 right-5 z-5">
+      <div className="absolute sm:bottom-12 sm:right-5 z-5 top-6 left-4">
         <CreateSessionCard longitude={longitude} latitude={latitude}/>
       </div>
 
-      <div className="absolute top-3 right-3 z-8">
+      <div className="absolute top-4 right-3 z-8 ">
         <FAQ></FAQ>
       </div>
     </main>
