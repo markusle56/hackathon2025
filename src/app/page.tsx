@@ -10,7 +10,7 @@ import { GiPlasticDuck } from "react-icons/gi";
 import { FaLocationDot } from "react-icons/fa6";
 import { CreateSessionCard } from "@/components/CreateSessionCard";
 import SessionCard from "@/components/SessionCard";
-
+import { Button } from "@/components/ui/button"
 import { FAQ } from '@/components/FAQ';
 
 const PICKEDZOOM: number = 15;
@@ -25,11 +25,12 @@ export default function HomePage() {
     pitch: 0,
     padding: { left: 0, right: 0, top: 0, bottom: 0 },
   });
-  const [id, setId] = useState("");
+  const [mySession, setMySession] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [longitude, setLongitude] = useState<number>(138.60470581054688)
   const [latitude, setLatitude] = useState<number>(-34.9196319580078)
+  const [suggestionBox, setSuggestionBox] = useState(true)
   useEffect(() => {
     (async () => {
       try {
@@ -42,8 +43,8 @@ export default function HomePage() {
               setLatitude(lat);
 
               const params = new URLSearchParams();
-              if (id) {
-                params.set("id", id);
+              if (mySession) {
+                params.set("id", mySession);
               } else {
                 params.set("longitude", String(lon));
                 params.set("latitude", String(lat));
@@ -57,7 +58,7 @@ export default function HomePage() {
           );
         } else {
           const params = new URLSearchParams();
-          if (id) params.set("id", id);
+          if (mySession) params.set("id", mySession);
           const res = await fetch(`/api/post/suggestion?${params.toString()}`);
           if (!res.ok) throw new Error(`Fetch failed (${res.status})`);
           const { data } = await res.json();
@@ -67,7 +68,7 @@ export default function HomePage() {
         console.error(err);
       }
     })();
-  }, [id, latitude, longitude]);
+  }, [mySession, latitude, longitude]);
 
   useEffect(() => {
     if (!selectedPost?.long || !selectedPost?.lat || !mapRef.current) {
@@ -103,21 +104,21 @@ export default function HomePage() {
     setViewState(evt.viewState);
   };
 
-  const offsetLatitude = (delta: number) => {
-    const safeLat = viewState.latitude ?? 0; 
-    return safeLat + delta; 
-  };
+  // const offsetLatitude = (delta: number) => {
+  //   const safeLat = viewState.latitude ?? 0; 
+  //   return safeLat + delta; 
+  // };
 
-  const moveNorth = () => {
-    if (!mapRef.current) return;
-    const map = mapRef.current.getMap();
-    if (!map) return;
+  // const moveNorth = () => {
+  //   if (!mapRef.current) return;
+  //   const map = mapRef.current.getMap();
+  //   if (!map) return;
 
-    map.easeTo({
-      center: [viewState.longitude, viewState.latitude + 0.01],
-      duration: 500,
-    });
-  };
+  //   map.easeTo({
+  //     center: [viewState.longitude, viewState.latitude + 0.01],
+  //     duration: 500,
+  //   });
+  // };
 
   // const getSessionData = (post: Post) => ({
   //   title: post.title,
@@ -145,17 +146,34 @@ export default function HomePage() {
         initialViewState={viewState}
         onMoveEnd={handleMoveEnd}
         mapStyle={mapStyle}>
-        {posts.map((post, idx) => (
-          <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
-            <GiPlasticDuck 
-              className="text-yellow-300 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
-              onClick={(e) => {
-                e.stopPropagation();
-                handleMarkerClick(post);
-              }}
-            />
-          </Marker>
-        ))}
+        {posts.map((post, idx) => {
+          if (mySession && mySession == post._id) {
+            return (
+              <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
+                <GiPlasticDuck 
+                  className="text-green-600 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMarkerClick(post);
+                  }}
+                />
+              </Marker>
+            )
+          } else {
+            return (
+              <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
+                <GiPlasticDuck 
+                  className="text-yellow-300 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleMarkerClick(post);
+                  }}
+                />
+              </Marker>
+            )
+          }
+        } 
+        )}
         <Marker anchor='center' longitude={longitude} latitude={latitude}>
             <FaLocationDot
               className="text-red-500 text-3xl " 
@@ -163,9 +181,8 @@ export default function HomePage() {
         </Marker>
 
         
-
-        {selectedPost && (
-          <Popup
+        {selectedPost &&  (
+           <Popup
             longitude={selectedPost.long}
             latitude={selectedPost.lat}
             anchor="left"
@@ -174,22 +191,32 @@ export default function HomePage() {
             className="custom-popup"
             closeButton={false}
           >
-            <SessionCard session={selectedPost} id={id} setId={setId} />
+            <SessionCard session={selectedPost} mySession={mySession} setMySession={setMySession} />
           </Popup>
         )}
       </Map>
-
-      <div className="absolute top-5 left-5 z-5">
+      <div className="absolute left-5 top-20 md:hidden flex flex-col" onClick={() => setSuggestionBox(!suggestionBox)}>
+        {!suggestionBox && (
+          <Button
+          className="bg-black text-white"
+          onClick={() => setSuggestionBox(!suggestionBox)}
+            >Suggest</Button>
+        )}
+          {suggestionBox && (
+            <SuggestionsBox posts={posts} selectedPost={selectedPost} setSelectedPost={setSelectedPost}/>
+          )}
+      </div>
+      <div className="absolute top-5 left-5 z-5 md:flex hidden">
         <SuggestionsBox posts={posts} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
       </div>
       <div className="absolute sm:bottom-1 left-1/2 -translate-x-1/2 bottom-1 z-50 w-15 sm:max-w-20">
         <img src="/NexusS_blue.svg" className="w-full" alt="Logo"></img>
       </div>
       <div className="absolute  z-5 top-6 left-4 sm:bottom-12 sm:right-5 sm:top-auto sm:left-auto">
-        <CreateSessionCard longitude={longitude} latitude={latitude}/>
+        <CreateSessionCard longitude={longitude} latitude={latitude} setMySession={setMySession}/>
       </div>
 
-      <div className="absolute top-4 right-3 z-8 ">
+      <div className="absolute top-4 right-3 z-8">
         <FAQ></FAQ>
       </div>
     </main>

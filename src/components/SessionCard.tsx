@@ -4,11 +4,11 @@ import { JoinNotification } from "@/components/JoinNotification";
 
 type SessionCardProps = {
   session: Post | null;
-  id: string;
-  setId: (id: string) => void;
+  mySession: string;
+  setMySession: (mySession: string) =>void;
 };
 
-export default function SessionCard({ session, id, setId }: SessionCardProps) {
+export default function SessionCard({ session, mySession, setMySession }: SessionCardProps) {
   const [notif, setNotif] = useState<string | null>(null);
   if (!session) return null;
   const icons = ["/img/users-round.svg", "/img/clock.svg"];
@@ -16,6 +16,27 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
   const handleNoti = () => {
     setNotif(null)
     window.location.reload()
+  }
+  const terminateSession = async () => {
+    try {
+      const termRes = await fetch(`/api/post/terminate?id=${encodeURIComponent(mySession)}`, {
+        method: "GET",
+      });
+
+      const termBody = await termRes.json().catch(() => null);
+
+      if (!termRes.ok) {
+        console.warn("Terminate failed:", termRes.status, termBody);
+      } else {
+        if (termBody && termBody.status === 200) {
+          setMySession("");
+        } else {
+          console.warn("Terminate response unexpected:", termBody);
+        }
+      }
+    } catch (err) {
+      console.warn("Failed to terminate route id:", err);
+    }
   }
   const joinHandler = async () => {
     if (!session._id) {
@@ -38,31 +59,12 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
         return;
       }
 
+      if (mySession) {
+        await terminateSession()
+      }
       // success
       setNotif("Joined session");
 
-      // if parent provided a route id, terminate it using existing terminate route (expects ?id=...)
-      if (id) {
-        try {
-          const termRes = await fetch(`/api/post/terminate?id=${encodeURIComponent(id)}`, {
-            method: "GET",
-          });
-
-          const termBody = await termRes.json().catch(() => null);
-
-          if (!termRes.ok) {
-            console.warn("Terminate failed:", termRes.status, termBody);
-          } else {
-            if (termBody && termBody.status === 200) {
-              setId("");
-            } else {
-              console.warn("Terminate response unexpected:", termBody);
-            }
-          }
-        } catch (err) {
-          console.warn("Failed to terminate route id:", err);
-        }
-      }
     } catch (err) {
       console.error("joinHandler error:", err);
       setNotif("An error occurred");
@@ -108,14 +110,25 @@ export default function SessionCard({ session, id, setId }: SessionCardProps) {
           ))}
         </div>
 
-        <div className="px-2 pb-1">
+        <div className="px-4 pb-4 flex gap-2">
           <button
             onClick={joinHandler}
-            className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md w-full"
+            className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md flex-1"
             aria-label="Join this session"
           >
             Join this session
           </button>
+
+          {mySession === session._id && (
+            <button
+              onClick={terminateSession}
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-md"
+              aria-label="Terminate session"
+              type="button"
+            >
+              Terminate
+            </button>
+          )}
         </div>
       </div>
 
