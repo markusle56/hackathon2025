@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const file = formData.get("file") as File | null;
     let imageUrl: string | null = null;
 
-    if (file) {
+    if (file && file.size > 0) {
       const fileName = `${Date.now()}-${file.name}`;
       const arrayBuffer = await file.arrayBuffer();
       const { error } = await supabase.storage
