@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NexusS
 
-## Getting Started
+## Project Overview
+NexusS was built in under **34 hours** for the [BIG Hackathon](https://big.devpost.com/), hosted by the [Computer Science Club (CS Club), University of Adelaide](https://csclub.org.au/), and the [UniSA Programming Community (UPC), University of South Australia](https://usasa.sa.edu.au/clubs/join/upc/) under the theme **“merger.”**
+The idea is simple: NexusS is a web app that helps students *merge* their independent study sessions by connecting them with others nearby.
 
-First, run the development server:
+With NexusS, students can:
+- **Discover nearby study sessions** based on the courses they’re interested in and drop by to join.
+- **Host a session** by marking their location, inviting others to join them.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This way, NexusS helps uni students find study buddies and make new friends.
+
+## Technologies
+### Frontend:
+- Next.js: React framework for building web apps
+- TypeScript: type safety
+- Shadcn UI: component styling
+- Tailwind CSS: utility-first styling
+### Backend:
+- MongoDB: database to store sessions and user data
+- Supabase: store images on the cloud
+- Vercel: deployment
+### Other tools:
+- MapLibre: maps and locations display
+- Zod: input validation for the study session form
+
+## Features
+- Browse nearby study sessions based on course or interest
+- Share your current study session location to invite others
+- Works well on mobile devices too!
+
+## Installation
+
+```
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create a `.env` file in the root directory containing this code snippet
+```
+// /root/.env
+MONGODB_URI = "mongodb+srv://nexusS_user_1:ececec@nexuss.26szun1.mongodb.net/?retryWrites=true&w=majority&appName=NexusS"
+NEXT_PUBLIC_MAP_API=HvPvo6hcWeibKxwaXMo8
+NEXT_PUBLIC_SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt6bWdoZHd1anR6bnludHBnZHNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg4ODQ5MzMsImV4cCI6MjA3NDQ2MDkzM30.ewLgiNOTpFnH1FDiREL_pcYUDdHSG_o4j1cVn0G_PYo
+NEXT_PUBLIC_SUPABASE_URL = https://kzmghdwujtznyntpgdsc.supabase.co/
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Learn More
+Then start the application at http://localhost:3000
 
-To learn more about Next.js, take a look at the following resources:
+## Challenges
+One team member had to leave early due to health issues but still managed to contribute remotely! :D
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Future Improvements
+Improve performance to handle lots of users and sessions at once without slowing down.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Team
+| Member              | GitHub Handle                         |
+|---------------------|---------------------------------------|
+| Anh Khoa Le         | [markusle56](github.com/markusle56)   |
+| Ngoc Han Ngo        | [ngongochan](github.com/ngongochan)   |
+| Shaurya Jain        | [Omniologist](github.com/Omniologist) |
+| Tran Duy Bao Nguyen | [TSSniper349](github.com/TSSniper349)  |
 
-## Deploy on Vercel
+## Live Demo
+You can check out the demo [here](https://nexuss2025.vercel.app/).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Fun Facts
+- The name NexusS came from the Nexus building, where we spent most of our time during the hackathon.
+- The word “nexus” itself means a central link or a connection!
