@@ -32,7 +32,7 @@ export default function HomePage() {
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
   const [longitude, setLongitude] = useState<number>(138.60470581054688)
   const [latitude, setLatitude] = useState<number>(-34.9196319580078)
-  const [suggestionBox, setSuggestionBox] = useState(true)
+  const [suggestionBox, setSuggestionBox] = useState(false)
   useEffect(() => {
     (async () => {
       try {
@@ -225,7 +225,7 @@ export default function HomePage() {
       <div className="absolute sm:bottom-1 left-1/2 -translate-x-1/2 bottom-1 z-50 w-15 sm:max-w-20">
         <img src="/NexusS_blue.svg" className="w-full" alt="Logo"></img>
       </div>
-      <div className="absolute  z-5 top-6 left-4 sm:bottom-12 sm:right-5 sm:top-auto sm:left-auto">
+      <div className="absolute  z-5 top-6 left-5 sm:bottom-12 sm:right-5 sm:top-auto sm:left-auto">
         <CreateSessionCard longitude={longitude} latitude={latitude} setMySession={setMySession}/>
       </div>
 
