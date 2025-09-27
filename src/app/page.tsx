@@ -182,10 +182,10 @@ export default function HomePage() {
       <div className="absolute top-5 left-5 z-5">
         <SuggestionsBox posts={posts} selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
       </div>
-      <div className="absolute sm:bottom-1 left-1/2 -translate-x-1/2 bottom-10 z-50 w-1/12 sm:max-w-20">
+      <div className="absolute sm:bottom-1 left-1/2 -translate-x-1/2 bottom-1 z-50 w-15 sm:max-w-20">
         <img src="/NexusS_blue.svg" className="w-full" alt="Logo"></img>
       </div>
-      <div className="absolute sm:bottom-12 sm:right-5 z-5 top-6 left-4">
+      <div className="absolute  z-5 top-6 left-4 sm:bottom-12 sm:right-5 sm:top-auto sm:left-auto">
         <CreateSessionCard longitude={longitude} latitude={latitude}/>
       </div>
 
