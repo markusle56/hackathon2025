@@ -10,49 +10,60 @@ type suggestionBoxProps = {
 export function SuggestionsBox({ posts = [], selectedPost = null, setSelectedPost = () => {} }: suggestionBoxProps){
     const handleClick = (post: Post) => {
         setSelectedPost?.(post);
-        // do something later 
     }
 
+    const toDate = (v: string | Date | undefined) => (v ? new Date(v) : new Date(0));
+    const fmtTime = (d: Date) => d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+
     const formatHourRange = (p: Post) => {
-      const s = new Date(p.start_time);
-      const e = new Date(p.end_time);
-      const fmt = (d: Date) =>
-        d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); 
-      return `${fmt(s)} - ${fmt(e)}`;
+      const s = toDate(p.start_time as any);
+      const e = toDate(p.end_time as any);
+      return `${fmtTime(s)} - ${fmtTime(e)}`;
     };
 
     return (
-        <div className='bg-white rounded-md md:flex md:flex-col gap-2 p-2 outline-1 outline-black max-h-1/2 hidden'>
-            <h1 className="text-center text-xl font-bold">Suggestions</h1>
-            {posts.length > 0 && (
-                <div className="gap-y-1 flex flex-col overflow-y-auto h-50">
-                {posts.map((post, idx) => (
+        <div className="bg-white rounded-md shadow-md p-3 outline-1 outline-gray-200 md:w-80 w-11/12 max-h-[60vh] flex flex-col gap-3">
+            <h2 className="text-center text-lg font-semibold">Suggestions</h2>
+
+            {posts.length > 0 ? (
+              <div className="flex flex-col gap-2 overflow-y-auto">
+                {posts.map((post, idx) => {
+                  const isSelected = Boolean(selectedPost?._id === post._id);
+                  return (
                     <Button
-                        key={post._id ?? idx}
-                        className={`flex flex-row py-2 h-auto text-black border-1 border-gray-500 hover:bg-white hover:border-2 justify-between items-center ${selectedPost?._id === post._id ? 'bg-gray hover:bg-gray' : 'bg-white'}`}
-                        onClick={() => handleClick(post)}
+                      key={post._id ?? idx}
+                      onClick={() => handleClick(post)}
+                      className={
+                        `w-full text-left p-2 rounded-md flex flex-col md:flex-row items-start md:items-center gap-3
+                         ${isSelected ? "bg-gray-100 border border-gray-300" : "bg-white hover:bg-gray-50"}
+                        `
+                      }
                     >
-                        <div className="flex flex-col text-left w-1/2 truncate">
-                            <h1 className="text-base">{post.title ?? "Untitled"}</h1>
-                            <p className="text-sm">
-                              {formatHourRange(post)}
-                            </p>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium truncate">{post.title ?? "Untitled"}</div>
+                        <div className="text-xs text-gray-500">{formatHourRange(post)}</div>
+                      </div>
+
+                      <div className="flex items-center gap-2 md:flex-col md:items-end">
+                        <div className="flex gap-2">
+                          {(post.tags ?? []).slice(0,2).map((t, i) => (
+                            <span key={i} className="bg-gray-200 text-xs text-gray-700 px-2 py-0.5 rounded-full truncate">
+                              {String(t)}
+                            </span>
+                          ))}
                         </div>
-                        <div className="flex flex-col gap-2 ml-4 w-1/4 truncate">
-                            {post.tags?.slice(0,2).map((t, i) => (
-                              <p key={i} className="bg-gray-300 p-1 p-x-4 rounded-lg truncate">{t.slice(0,1).toUpperCase()}{t.slice(1)}</p>
-                            ))}
+
+                        <div className="flex items-center text-xs text-gray-700 ml-2 md:ml-0">
+                          <img src="/img/users-round.svg" alt="people" className="w-4 h-4 mr-1" />
+                          <span>{post.people ?? 0}/{post.capacity ?? 0}</span>
                         </div>
-                        <div className="flex flex-col w-1/4 h-5">
-                            <img src="/img/users-round.svg" className="p-0 h-full" alt="Icon"></img>
-                            <p>{post.people}/{post.capacity}</p>
-                        </div>
+                      </div>
                     </Button>
-                ))}
-            </div>
-            )}
-            {posts.length === 0 && (
-              <div className="text-sm text-gray-600 w-50 text-center">No suggestions</div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-600 text-center">No suggestions</div>
             )}
         </div>
     )

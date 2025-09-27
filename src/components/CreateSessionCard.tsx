@@ -68,9 +68,9 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-type CreateSessionCardProps = { longitude?: number; latitude?: number };
+type CreateSessionCardProps = { longitude?: number; latitude?: number, setMySession?: (postId: string) => void };
 
-export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSessionCardProps) {
+export function CreateSessionCard({ longitude = 0, latitude = 0, setMySession }: CreateSessionCardProps) {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<File[] | undefined>(undefined);
   const [notif, setNotif] = useState<string | null>(null);
@@ -135,6 +135,8 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
           body: formData,
         });
         if (response.ok) {
+          const {postId} = await response.json();
+          setMySession?.(String(postId));
           console.log("Session created successfully!");
           setNotif("Session created successfully!") 
           form.reset();
@@ -146,7 +148,7 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
         console.error("Upload error:", error);
       }
     } else {
-      await fetch("/api/post/submit", {
+      const res = await fetch("/api/post/submit", {
          method: "POST",
          headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -155,6 +157,11 @@ export function CreateSessionCard({ longitude = 0, latitude = 0 }: CreateSession
           long: String(submittedData.long ?? longitude ?? 0),
         }),
        });
+      if (!res.ok) {
+        setNotif("Error creating session");
+      }
+      const {postId} = await res.json()
+      setMySession?.(String(postId));
       form.reset();
       setNotif("Session created successfully!") 
     }
