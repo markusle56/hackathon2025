@@ -25,7 +25,7 @@ export function JoinNotification({
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-3 min-w-50 w-1/2 justify-center rounded-md px-3 py-2 text-sm sm:mt-0 sm:w-auto text-white bg-black hover:scale-105"
+                className="max-w-xs mx-auto rounded-md px-3 py-2 text-sm text-white bg-black"
               >
                 Got it!
               </button>

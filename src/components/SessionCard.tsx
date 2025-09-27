@@ -79,7 +79,7 @@ export default function SessionCard({ session, mySession, setMySession, handlePo
 
   return (
     <>
-      <div className="w-full rounded-lg overflow-hidden">
+      <div className="w-[300px] rounded-lg overflow-hidden">
         {session.img && (
           <div className="px-2 py-1">
             <img src={session.img} alt="Illustration session spots" />
@@ -113,11 +113,11 @@ export default function SessionCard({ session, mySession, setMySession, handlePo
           ))}
         </div>
 
-        <div className="px-4 pb-4 flex">
+        <div className="px-2 flex">
           {mySession != session._id && (
           <button
             onClick={joinHandler}
-            className="bg-black hover:bg-gray-900 text-white font-bold py-2 px-4 rounded-md flex-1"
+            className="bg-black hover:bg-gray-900 text-white text-base w-full font-bold py-2 px-4 rounded-md flex-1"
             aria-label="Join this session"
           >
             Join this session
