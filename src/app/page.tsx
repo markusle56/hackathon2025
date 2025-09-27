@@ -166,7 +166,7 @@ export default function HomePage() {
           (  
               <Marker key={post._id ?? idx} anchor='center' longitude={post.long} latitude={post.lat}>
                 <GiPlasticDuck 
-                  className="text-yellow-300 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
+                  className="text-yellow-500 text-3xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
                   onClick={(e) => {
                     e.stopPropagation();
                     handleMarkerClick(post);
@@ -178,7 +178,7 @@ export default function HomePage() {
         { myPost && (
           <Marker anchor='center' longitude={myPost.long} latitude={myPost.lat}>
             <GiPlasticDuck 
-              className="text-orange-500 text-4xl z-45" 
+              className="text-orange-500 text-5xl cursor-pointer text-shadow-4 text-shadow-blue-800" 
               onClick={(e) => {
                     e.stopPropagation();
                     handleMarkerClick(myPost);
