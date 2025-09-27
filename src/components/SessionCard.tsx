@@ -6,16 +6,18 @@ type SessionCardProps = {
   session: Post | null;
   mySession: string;
   setMySession: (mySession: string) =>void;
+  handlePopupClose: () => void;
 };
 
-export default function SessionCard({ session, mySession, setMySession }: SessionCardProps) {
+export default function SessionCard({ session, mySession, setMySession, handlePopupClose }: SessionCardProps) {
   const [notif, setNotif] = useState<string | null>(null);
   if (!session) return null;
   const icons = ["/img/users-round.svg", "/img/clock.svg"];
   
   const handleNoti = () => {
     setNotif(null)
-    window.location.reload()
+    setMySession("")
+    handlePopupClose()
   }
   const terminateSession = async () => {
     try {
@@ -30,6 +32,7 @@ export default function SessionCard({ session, mySession, setMySession }: Sessio
       } else {
         if (termBody && termBody.status === 200) {
           setMySession("");
+          handlePopupClose();
         } else {
           console.warn("Terminate response unexpected:", termBody);
         }

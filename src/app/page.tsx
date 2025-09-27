@@ -205,7 +205,7 @@ export default function HomePage() {
             className="custom-popup"
             closeButton={false}
           >
-            <SessionCard session={selectedPost} mySession={mySession} setMySession={setMySession} />
+            <SessionCard session={selectedPost} mySession={mySession} setMySession={setMySession} handlePopupClose={handlePopupClose} />
           </Popup>
         )}
       </Map>
